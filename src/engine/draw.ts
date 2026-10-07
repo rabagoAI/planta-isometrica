@@ -174,14 +174,17 @@ export function drawFrame(input: DrawInput): void {
     add(tx + ty, (i2) => truck(i2, tx, ty));
   }
 
-  // Cajas avanzando por la cinta de envasado mientras la sala produce.
-  if (plant.stateOf(plant.byId['env']!) === 'prod') {
-    for (let i = 0; i < 5; i++) {
-      const f = (iso.t * 0.35 + i / 5) % 1;
-      const x = 800 - ofx + f * 232;
-      const y = 236 - ofy + 1;
+  // Cajas avanzando por las cintas mientras su sala está en proceso. El trazado
+  // viene de los datos: codificarlo aquí ataba el dibujo a un plano concreto.
+  for (const c of data.conveyors ?? []) {
+    const room = plant.byId[c.room];
+    if (!room || plant.stateOf(room) !== 'prod') continue;
+    for (let i = 0; i < c.count; i++) {
+      const f = (iso.t * c.speed + i / c.count) % 1;
+      const x = c.x0 - ofx + f * (c.x1 - c.x0);
+      const y = c.y - ofy;
       const token = i % 2 ? 'carton' : 'carton2';
-      add(x + y + 20, (i2) => i2.box(x, y + 1, 9, 8, 7, 7, token));
+      add(x + y + 20, (i2) => i2.box(x, y, 9, 8, 7, c.z, token));
     }
   }
 

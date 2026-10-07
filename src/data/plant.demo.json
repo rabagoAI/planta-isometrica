@@ -415,6 +415,18 @@
       "token": "floor-corr"
     }
   ],
+  "conveyors": [
+    {
+      "_": "Cajas que avanzan por la cinta mientras la sala produce.",
+      "room": "env",
+      "x0": 745,
+      "x1": 872,
+      "y": 182,
+      "z": 7,
+      "count": 5,
+      "speed": 0.35
+    }
+  ],
   "equipment": [
     {
       "note": "Fabricación: reactores sobre la plataforma"
@@ -764,7 +776,15 @@
     {
       "type": "rack",
       "x": 930,
-      "y": 180,
+      "y": 182,
+      "len": 200,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "rack",
+      "x": 930,
+      "y": 234,
       "len": 200,
       "dep": 14,
       "axis": "x"
@@ -772,7 +792,7 @@
     {
       "type": "box",
       "x": 915,
-      "y": 230,
+      "y": 284,
       "w": 24,
       "d": 20,
       "h": 12,
@@ -780,8 +800,8 @@
     },
     {
       "type": "box",
-      "x": 950,
-      "y": 235,
+      "x": 1150,
+      "y": 180,
       "w": 22,
       "d": 18,
       "h": 10,

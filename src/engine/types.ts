@@ -167,6 +167,18 @@ export interface PlantData {
    * sueltas, para que todo lo que se apoya encima quede siempre por delante.
    */
   platforms: { x: number; y: number; w: number; d: number; h: number; token: ColorToken }[];
+  /** Cintas transportadoras: cajas que avanzan mientras la sala está en proceso. */
+  conveyors: {
+    /** Sala cuyo estado enciende la cinta. */
+    room: string;
+    x0: number;
+    x1: number;
+    y: number;
+    /** Cota de la banda. */
+    z: number;
+    count: number;
+    speed: number;
+  }[];
   equipment: EquipmentItem[];
   zones: ZoneData[];
   markers: MarkerData[];
