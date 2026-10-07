@@ -1,0 +1,11 @@
+# Lo que nunca debe subirse a un despliegue.
+#
+# El despliegue por CLI (vercel --prod) sube los ficheros del directorio, no lo
+# que hay en git: sin esto, un despliegue lanzado desde aquí compilaría el plano
+# real y lo serviría en una URL pública. .gitignore no gobierna esta subida.
+src/data/plant.local.json
+*.local.md
+referencia/
+
+node_modules
+dist
