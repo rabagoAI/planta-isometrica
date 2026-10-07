@@ -1,0 +1,44 @@
+/* Paleta de la consola de planta. Tema claro, oscuro automático por preferencia del sistema,
+   y override manual con data-theme en <html>. El canvas lee estas mismas variables. */
+:root{
+  --font-display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --bg:#E8EDF2; --surface:#F7F9FB; --stage:#EDF1F5; --ink:#132033; --muted:#566678; --line:#C7D1DB;
+  --accent:#1F4FD8; --accent-ink:#FFFFFF;
+  --prod:#2F6BFF; --ok:#1E9E78; --clean:#E0971A; --off:#8493A3; --risk:#E5731F; --alert:#D6352E;
+  --ground:#DCE4EC;
+  --floor-prod:#F5F8FC; --floor-corr:#E2E8EF; --floor-store:#EBEFF3; --floor-amen:#EFF3F7; --floor-serv:#DDE3EA;
+  --wall-t:#FFFFFF; --wall-l:#CBD5E0; --wall-r:#AEBAC8;
+  --mach:#2F5FD0; --rack:#8CA3C6; --tank:#C3CDD9; --carton:#D7B07A; --carton2:#C79A62; --wood:#B98A55;
+  --fork:#F2B21B; --dark:#222C39; --vest:#F28C28;
+  /* Ropa por departamento: fabricación blanco, envasado verde, expedición gris. */
+  --wear-fab:#EEF2F6; --wear-env:#2E9E63; --wear-exp:#9AA7B4;
+  --truck-box:#F1F5FA; --tree:#3FA46F; --trunk:#7A6650;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C131B; --surface:#141E29; --stage:#101922; --ink:#E5ECF3; --muted:#92A2B4; --line:#263545;
+    --accent:#7DA0FF; --accent-ink:#0C131B;
+    --prod:#5B8DFF; --ok:#3CC49A; --clean:#F0AE3A; --off:#7A8898; --risk:#F28B3E; --alert:#F0554D;
+    --ground:#18232F;
+    --floor-prod:#26374A; --floor-corr:#1D2A38; --floor-store:#223142; --floor-amen:#202D3B; --floor-serv:#1A2531;
+    --wall-t:#53687F; --wall-l:#364A60; --wall-r:#283A4D;
+    --mach:#3F66C8; --rack:#5F7799; --tank:#70839A; --carton:#B58E5C; --carton2:#9E7A4C; --wood:#8E6A42;
+    --truck-box:#B3C0CF; --tree:#2E8B63; --trunk:#6B5A48;
+    --wear-fab:#C9D4DF; --wear-env:#44B97B; --wear-exp:#7E8C9A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C131B; --surface:#141E29; --stage:#101922; --ink:#E5ECF3; --muted:#92A2B4; --line:#263545;
+  --accent:#7DA0FF; --accent-ink:#0C131B;
+  --prod:#5B8DFF; --ok:#3CC49A; --clean:#F0AE3A; --off:#7A8898; --risk:#F28B3E; --alert:#F0554D;
+  --ground:#18232F;
+  --floor-prod:#26374A; --floor-corr:#1D2A38; --floor-store:#223142; --floor-amen:#202D3B; --floor-serv:#1A2531;
+  --wall-t:#53687F; --wall-l:#364A60; --wall-r:#283A4D;
+  --mach:#3F66C8; --rack:#5F7799; --tank:#70839A; --carton:#B58E5C; --carton2:#9E7A4C; --wood:#8E6A42;
+  --truck-box:#B3C0CF; --tree:#2E8B63; --trunk:#6B5A48;
+  --wear-fab:#C9D4DF; --wear-env:#44B97B; --wear-exp:#7E8C9A;
+  color-scheme:dark;
+}

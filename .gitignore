@@ -1,0 +1,17 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+.vercel
+.DS_Store
+*.log
+
+# El plano real de la instalación es información sensible. No entra en el repo
+# ni en ningún build público: sin este fichero se compila la planta ficticia
+# de src/data/plant.demo.json.
+src/data/plant.local.json
+referencia/
+
+# Notas de trabajo con datos de la instalación real.
+*.local.md

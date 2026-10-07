@@ -1,0 +1,1295 @@
+{
+  "meta": {
+    "name": "Planta de ejemplo",
+    "level": "Planta baja",
+    "note": "Instalación ficticia. Coordenadas en px; el motor resta meta.origin.",
+    "origin": {
+      "x": 100,
+      "y": 100
+    },
+    "shiftStartMinutes": 480
+  },
+  "view": {
+    "_": "tilt: factor vertical de la proyección.",
+    "tilt": 0.36
+  },
+  "wear": {
+    "_": "Ropa por departamento; manda la sala.",
+    "default": "vest",
+    "byRoom": {
+      "fab": "wear-fab",
+      "env": "wear-env",
+      "mp": "wear-exp"
+    }
+  },
+  "rooms": [
+    {
+      "id": "vest",
+      "name": "Vestuarios",
+      "short": "",
+      "x0": 100,
+      "y0": 100,
+      "x1": 230,
+      "y1": 210,
+      "area": 72.43,
+      "kind": "amen"
+    },
+    {
+      "id": "lab",
+      "name": "Laboratorio de control",
+      "short": "Laboratorio",
+      "x0": 230,
+      "y0": 100,
+      "x1": 340,
+      "y1": 210,
+      "area": 62.86,
+      "kind": "prod",
+      "label": [
+        285,
+        130
+      ]
+    },
+    {
+      "id": "exc",
+      "name": "Exclusa",
+      "short": "",
+      "x0": 340,
+      "y0": 100,
+      "x1": 470,
+      "y1": 210,
+      "area": 76.62,
+      "kind": "prod"
+    },
+    {
+      "id": "fab",
+      "name": "Sala de fabricación",
+      "short": "Fabricación",
+      "x0": 470,
+      "y0": 100,
+      "x1": 720,
+      "y1": 320,
+      "area": 282.75,
+      "kind": "prod",
+      "label": [
+        520,
+        130
+      ]
+    },
+    {
+      "id": "env",
+      "name": "Sala de envasado",
+      "short": "Envasado",
+      "x0": 720,
+      "y0": 100,
+      "x1": 900,
+      "y1": 320,
+      "area": 210.03,
+      "kind": "prod",
+      "label": [
+        795,
+        305
+      ]
+    },
+    {
+      "id": "apt",
+      "name": "Almacén de producto acabado",
+      "short": "Producto acabado",
+      "x0": 900,
+      "y0": 100,
+      "x1": 1180,
+      "y1": 320,
+      "area": 323.7,
+      "kind": "store",
+      "label": [
+        975,
+        115
+      ]
+    },
+    {
+      "id": "com",
+      "name": "Comedor",
+      "short": "Comedor",
+      "x0": 100,
+      "y0": 210,
+      "x1": 230,
+      "y1": 320,
+      "area": 74.91,
+      "kind": "amen",
+      "label": [
+        165,
+        228
+      ]
+    },
+    {
+      "id": "ofi",
+      "name": "Oficinas",
+      "short": "Oficinas",
+      "x0": 230,
+      "y0": 210,
+      "x1": 340,
+      "y1": 320,
+      "area": 62.73,
+      "kind": "amen",
+      "label": [
+        285,
+        228
+      ]
+    },
+    {
+      "id": "pes",
+      "name": "Sala de pesaje",
+      "short": "Pesaje",
+      "x0": 340,
+      "y0": 210,
+      "x1": 470,
+      "y1": 320,
+      "area": 75.45,
+      "kind": "prod",
+      "label": [
+        405,
+        228
+      ]
+    },
+    {
+      "id": "pas",
+      "name": "Pasillo principal",
+      "short": "Pasillo principal",
+      "x0": 100,
+      "y0": 320,
+      "x1": 1180,
+      "y1": 370,
+      "area": 273.22,
+      "kind": "corr",
+      "label": [
+        300,
+        345
+      ]
+    },
+    {
+      "id": "rec",
+      "name": "Recepción",
+      "short": "Recepción",
+      "x0": 100,
+      "y0": 370,
+      "x1": 260,
+      "y1": 460,
+      "area": 76.84,
+      "kind": "amen",
+      "label": [
+        180,
+        452
+      ]
+    },
+    {
+      "id": "serv",
+      "name": "Sala técnica",
+      "short": "Sala técnica",
+      "x0": 260,
+      "y0": 370,
+      "x1": 400,
+      "y1": 460,
+      "area": 63.55,
+      "kind": "serv",
+      "label": [
+        330,
+        452
+      ]
+    },
+    {
+      "id": "agua",
+      "name": "Tratamiento de agua",
+      "short": "Agua",
+      "x0": 400,
+      "y0": 370,
+      "x1": 540,
+      "y1": 460,
+      "area": 67.03,
+      "kind": "serv",
+      "label": [
+        470,
+        452
+      ]
+    },
+    {
+      "id": "aux",
+      "name": "Almacén de materias auxiliares",
+      "short": "Auxiliares",
+      "x0": 540,
+      "y0": 370,
+      "x1": 740,
+      "y1": 460,
+      "area": 93.03,
+      "kind": "store",
+      "label": [
+        640,
+        452
+      ]
+    },
+    {
+      "id": "mp",
+      "name": "Almacén de materia prima",
+      "short": "Materia prima",
+      "x0": 740,
+      "y0": 370,
+      "x1": 1180,
+      "y1": 460,
+      "area": 210.16,
+      "kind": "store",
+      "label": [
+        830,
+        392
+      ]
+    }
+  ],
+  "doors": [
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 150,
+      "b": 185
+    },
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 275,
+      "b": 310
+    },
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 390,
+      "b": 425
+    },
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 570,
+      "b": 610
+    },
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 790,
+      "b": 830
+    },
+    {
+      "axis": "h",
+      "c": 320,
+      "a": 1020,
+      "b": 1060
+    },
+    {
+      "axis": "h",
+      "c": 370,
+      "a": 160,
+      "b": 200
+    },
+    {
+      "axis": "h",
+      "c": 370,
+      "a": 310,
+      "b": 350
+    },
+    {
+      "axis": "h",
+      "c": 370,
+      "a": 450,
+      "b": 490
+    },
+    {
+      "axis": "h",
+      "c": 370,
+      "a": 620,
+      "b": 660
+    },
+    {
+      "axis": "h",
+      "c": 370,
+      "a": 900,
+      "b": 940
+    },
+    {
+      "axis": "h",
+      "c": 210,
+      "a": 150,
+      "b": 185
+    },
+    {
+      "axis": "h",
+      "c": 210,
+      "a": 275,
+      "b": 310
+    },
+    {
+      "axis": "h",
+      "c": 210,
+      "a": 390,
+      "b": 425
+    },
+    {
+      "axis": "v",
+      "c": 230,
+      "a": 140,
+      "b": 180
+    },
+    {
+      "axis": "v",
+      "c": 340,
+      "a": 140,
+      "b": 180
+    },
+    {
+      "axis": "v",
+      "c": 470,
+      "a": 140,
+      "b": 180
+    },
+    {
+      "axis": "v",
+      "c": 720,
+      "a": 180,
+      "b": 220
+    },
+    {
+      "axis": "v",
+      "c": 900,
+      "a": 180,
+      "b": 220
+    },
+    {
+      "axis": "h",
+      "c": 460,
+      "a": 1060,
+      "b": 1110
+    }
+  ],
+  "walls": {
+    "defaultHeight": 20,
+    "overrides": [
+      {
+        "axis": "h",
+        "c": 100,
+        "height": 36
+      },
+      {
+        "axis": "v",
+        "c": 100,
+        "height": 36
+      },
+      {
+        "axis": "h",
+        "c": 460,
+        "height": 5
+      },
+      {
+        "axis": "v",
+        "c": 1180,
+        "height": 5
+      }
+    ],
+    "segmentLength": 40,
+    "thickness": 3
+  },
+  "ground": {
+    "x": -40,
+    "y": -70,
+    "w": 1240,
+    "d": 500,
+    "h": 10,
+    "z0": -10,
+    "token": "ground"
+  },
+  "aisle": {
+    "y": 245,
+    "x0": -30,
+    "x1": 1120
+  },
+  "platforms": [
+    {
+      "_": "Plataforma de Fabricación.",
+      "x": 520,
+      "y": 150,
+      "w": 160,
+      "d": 120,
+      "h": 4,
+      "token": "floor-corr"
+    }
+  ],
+  "equipment": [
+    {
+      "note": "Fabricación: reactores sobre la plataforma"
+    },
+    {
+      "type": "cyl",
+      "room": "fab",
+      "x": 560,
+      "y": 185,
+      "r": 14,
+      "h": 42,
+      "token": "tank",
+      "phase": 0.0,
+      "z0": 4
+    },
+    {
+      "type": "cyl",
+      "room": "fab",
+      "x": 620,
+      "y": 185,
+      "r": 16,
+      "h": 50,
+      "token": "tank",
+      "phase": 1.6,
+      "z0": 4
+    },
+    {
+      "type": "cyl",
+      "room": "fab",
+      "x": 560,
+      "y": 235,
+      "r": 16,
+      "h": 46,
+      "token": "tank",
+      "phase": 3.2,
+      "z0": 4
+    },
+    {
+      "type": "cyl",
+      "room": "fab",
+      "x": 625,
+      "y": 240,
+      "r": 14,
+      "h": 38,
+      "token": "tank",
+      "phase": 4.8,
+      "z0": 4
+    },
+    {
+      "type": "box",
+      "x": 490,
+      "y": 130,
+      "w": 30,
+      "d": 18,
+      "h": 14,
+      "token": "mach"
+    },
+    {
+      "type": "box",
+      "x": 500,
+      "y": 300,
+      "w": 44,
+      "d": 10,
+      "h": 10,
+      "token": "tank"
+    },
+    {
+      "note": "Envasado"
+    },
+    {
+      "type": "box",
+      "x": 740,
+      "y": 180,
+      "w": 140,
+      "d": 10,
+      "h": 7,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 760,
+      "y": 210,
+      "w": 40,
+      "d": 22,
+      "h": 22,
+      "token": "mach"
+    },
+    {
+      "type": "box",
+      "x": 820,
+      "y": 210,
+      "w": 50,
+      "d": 22,
+      "h": 28,
+      "token": "mach"
+    },
+    {
+      "type": "box",
+      "x": 750,
+      "y": 280,
+      "w": 24,
+      "d": 20,
+      "h": 12,
+      "token": "carton"
+    },
+    {
+      "type": "box",
+      "x": 800,
+      "y": 285,
+      "w": 22,
+      "d": 18,
+      "h": 10,
+      "token": "carton2"
+    },
+    {
+      "note": "Servicios y tratamiento de agua"
+    },
+    {
+      "type": "cyl",
+      "room": "serv",
+      "x": 290,
+      "y": 415,
+      "r": 14,
+      "h": 44,
+      "token": "tank",
+      "phase": 0
+    },
+    {
+      "type": "box",
+      "x": 330,
+      "y": 410,
+      "w": 28,
+      "d": 24,
+      "h": 24,
+      "token": "mach"
+    },
+    {
+      "type": "cyl",
+      "room": "agua",
+      "x": 430,
+      "y": 410,
+      "r": 12,
+      "h": 36,
+      "token": "tank",
+      "phase": 0
+    },
+    {
+      "type": "cyl",
+      "room": "agua",
+      "x": 470,
+      "y": 410,
+      "r": 12,
+      "h": 36,
+      "token": "tank",
+      "phase": 0
+    },
+    {
+      "type": "box",
+      "x": 500,
+      "y": 430,
+      "w": 30,
+      "d": 16,
+      "h": 12,
+      "token": "mach"
+    },
+    {
+      "note": "Laboratorio, comedor y oficinas"
+    },
+    {
+      "type": "box",
+      "x": 240,
+      "y": 115,
+      "w": 30,
+      "d": 10,
+      "h": 10,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 240,
+      "y": 170,
+      "w": 30,
+      "d": 10,
+      "h": 10,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 300,
+      "y": 120,
+      "w": 26,
+      "d": 14,
+      "h": 9,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 309,
+      "y": 123,
+      "w": 8,
+      "d": 2,
+      "h": 7,
+      "token": "dark",
+      "z0": 9
+    },
+    {
+      "type": "box",
+      "x": 115,
+      "y": 230,
+      "w": 50,
+      "d": 14,
+      "h": 8,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 115,
+      "y": 268,
+      "w": 50,
+      "d": 14,
+      "h": 8,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 175,
+      "y": 230,
+      "w": 45,
+      "d": 14,
+      "h": 8,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 245,
+      "y": 240,
+      "w": 30,
+      "d": 14,
+      "h": 10,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 256,
+      "y": 243,
+      "w": 9,
+      "d": 3,
+      "h": 8,
+      "token": "dark",
+      "z0": 10
+    },
+    {
+      "type": "box",
+      "x": 130,
+      "y": 400,
+      "w": 32,
+      "d": 14,
+      "h": 10,
+      "token": "tank"
+    },
+    {
+      "type": "box",
+      "x": 141,
+      "y": 403,
+      "w": 9,
+      "d": 3,
+      "h": 8,
+      "token": "dark",
+      "z0": 10
+    },
+    {
+      "type": "seated",
+      "x": 313,
+      "y": 138,
+      "token": "prod",
+      "lab": true
+    },
+    {
+      "type": "seated",
+      "x": 160,
+      "y": 282,
+      "token": "vest",
+      "lab": false
+    },
+    {
+      "type": "seated",
+      "x": 260,
+      "y": 258,
+      "token": "mach",
+      "lab": false
+    },
+    {
+      "type": "seated",
+      "x": 146,
+      "y": 418,
+      "token": "prod",
+      "lab": false
+    },
+    {
+      "note": "Almacén de materias auxiliares"
+    },
+    {
+      "type": "rack",
+      "x": 570,
+      "y": 398,
+      "len": 160,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "rack",
+      "x": 570,
+      "y": 436,
+      "len": 160,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "box",
+      "x": 560,
+      "y": 415,
+      "w": 22,
+      "d": 16,
+      "h": 10,
+      "token": "carton"
+    },
+    {
+      "type": "box",
+      "x": 700,
+      "y": 418,
+      "w": 22,
+      "d": 14,
+      "h": 8,
+      "token": "carton2"
+    },
+    {
+      "note": "Almacén de producto acabado"
+    },
+    {
+      "type": "rack",
+      "x": 930,
+      "y": 130,
+      "len": 200,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "rack",
+      "x": 930,
+      "y": 180,
+      "len": 200,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "box",
+      "x": 915,
+      "y": 230,
+      "w": 24,
+      "d": 20,
+      "h": 12,
+      "token": "carton"
+    },
+    {
+      "type": "box",
+      "x": 950,
+      "y": 235,
+      "w": 22,
+      "d": 18,
+      "h": 10,
+      "token": "carton2"
+    },
+    {
+      "note": "Almacén de materia prima"
+    },
+    {
+      "type": "rack",
+      "x": 780,
+      "y": 390,
+      "len": 180,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "rack",
+      "x": 1000,
+      "y": 390,
+      "len": 120,
+      "dep": 14,
+      "axis": "x"
+    },
+    {
+      "type": "stack",
+      "x": 762,
+      "y": 440
+    },
+    {
+      "type": "stack",
+      "x": 790,
+      "y": 440
+    },
+    {
+      "note": "Arbolado"
+    },
+    {
+      "type": "tree",
+      "x": 180,
+      "y": 70
+    },
+    {
+      "type": "tree",
+      "x": 420,
+      "y": 70
+    },
+    {
+      "type": "tree",
+      "x": 700,
+      "y": 70
+    },
+    {
+      "type": "tree",
+      "x": 980,
+      "y": 70
+    },
+    {
+      "type": "tree",
+      "x": 1240,
+      "y": 70
+    },
+    {
+      "type": "tree",
+      "x": 70,
+      "y": 420
+    },
+    {
+      "type": "tree",
+      "x": 1240,
+      "y": 430
+    }
+  ],
+  "zones": [
+    {
+      "x0": 970,
+      "y0": 275,
+      "x1": 1165,
+      "y1": 305,
+      "token": "clean",
+      "fill": 0.14
+    },
+    {
+      "x0": 1120,
+      "y0": 385,
+      "x1": 1175,
+      "y1": 452,
+      "token": "prod",
+      "fill": 0.1
+    },
+    {
+      "x0": 560,
+      "y0": 388,
+      "x1": 640,
+      "y1": 420,
+      "token": "alert",
+      "fill": 0.07
+    },
+    {
+      "x0": 1050,
+      "y0": 480,
+      "x1": 1120,
+      "y1": 515,
+      "token": "prod",
+      "fill": 0
+    }
+  ],
+  "markers": [
+    {
+      "text": "Cuarentena",
+      "x": 1065,
+      "y": 262,
+      "token": "clean"
+    },
+    {
+      "text": "Zona de carga",
+      "x": 1105,
+      "y": 372,
+      "token": "prod"
+    }
+  ],
+  "legend": [
+    {
+      "token": "prod",
+      "label": "En proceso"
+    },
+    {
+      "token": "clean",
+      "label": "En limpieza"
+    },
+    {
+      "token": "off",
+      "label": "Parada"
+    },
+    {
+      "token": "risk",
+      "label": "En riesgo"
+    },
+    {
+      "token": "alert",
+      "label": "Desviación"
+    }
+  ],
+  "quarantine": {
+    "y": 290,
+    "slotX0": 1140,
+    "slotStep": -22,
+    "slots": [
+      "L-2410-006",
+      "L-2410-007",
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "lot": {
+    "firstNumber": 9,
+    "completedToday": 4,
+    "idPrefix": "L-2410-",
+    "speed": 150,
+    "maxConcurrent": 5,
+    "spawnGap": 9,
+    "queueGap": 26,
+    "processJitter": {
+      "min": 0.8,
+      "max": 1.35
+    },
+    "stages": [
+      "Recepción",
+      "Pesaje",
+      "Fabricación",
+      "Envasado",
+      "Cuarentena"
+    ],
+    "route": [
+      {
+        "x": 1085,
+        "y": 500,
+        "wait": 2.2,
+        "stage": 0,
+        "msg": "Descarga de materia prima en el muelle"
+      },
+      {
+        "x": 1085,
+        "y": 440
+      },
+      {
+        "x": 1085,
+        "y": 410,
+        "wait": 3,
+        "stage": 0,
+        "msg": "Recepción y muestreo de la materia prima"
+      },
+      {
+        "x": 920,
+        "y": 410
+      },
+      {
+        "x": 920,
+        "y": 345
+      },
+      {
+        "x": 405,
+        "y": 345
+      },
+      {
+        "x": 405,
+        "y": 270,
+        "wait": 4,
+        "stage": 1,
+        "msg": "Dispensación en sala de pesaje"
+      },
+      {
+        "x": 405,
+        "y": 160,
+        "wait": 2.2,
+        "stage": 1,
+        "msg": "Paso por la exclusa"
+      },
+      {
+        "x": 520,
+        "y": 160
+      },
+      {
+        "x": 500,
+        "y": 290
+      },
+      {
+        "x": 600,
+        "y": 290,
+        "wait": 7,
+        "stage": 2,
+        "msg": "Fabricación del lote"
+      },
+      {
+        "x": 700,
+        "y": 200
+      },
+      {
+        "x": 760,
+        "y": 200
+      },
+      {
+        "x": 800,
+        "y": 245,
+        "wait": 6,
+        "stage": 3,
+        "msg": "Envasado del lote"
+      },
+      {
+        "x": 870,
+        "y": 200
+      },
+      {
+        "x": 960,
+        "y": 200
+      },
+      {
+        "x": 960,
+        "y": 290
+      },
+      {
+        "xFromSlot": true,
+        "y": 290,
+        "wait": 3,
+        "stage": 4,
+        "msg": "Palé en cuarentena, pendiente de liberación"
+      }
+    ]
+  },
+  "truck": {
+    "x": -150,
+    "y": 500,
+    "dockX": 1085,
+    "exitX": 1400,
+    "resetX": -200,
+    "speed": 320,
+    "dwell": 0.8,
+    "unload": 1.8,
+    "gap": 1
+  },
+  "forklifts": [
+    {
+      "x": 1160,
+      "y0": 130,
+      "y1": 300,
+      "speed": 55,
+      "pause": 2,
+      "dir": 1
+    },
+    {
+      "x": 975,
+      "y0": 400,
+      "y1": 450,
+      "speed": 42,
+      "pause": 2.5,
+      "dir": -1
+    }
+  ],
+  "walkers": [
+    {
+      "points": [
+        [
+          130,
+          150
+        ],
+        [
+          200,
+          180
+        ]
+      ],
+      "color": "vest",
+      "phase": 0
+    },
+    {
+      "points": [
+        [
+          250,
+          140
+        ],
+        [
+          320,
+          140
+        ]
+      ],
+      "color": "truck-box",
+      "phase": 4,
+      "lab": true
+    },
+    {
+      "points": [
+        [
+          150,
+          250
+        ],
+        [
+          210,
+          295
+        ]
+      ],
+      "color": "vest",
+      "phase": 0.6
+    },
+    {
+      "points": [
+        [
+          200,
+          345
+        ],
+        [
+          1000,
+          345
+        ]
+      ],
+      "color": "vest",
+      "phase": 2
+    },
+    {
+      "points": [
+        [
+          500,
+          118
+        ],
+        [
+          690,
+          118
+        ]
+      ],
+      "color": "wear-fab",
+      "phase": 2.9
+    },
+    {
+      "points": [
+        [
+          500,
+          300
+        ],
+        [
+          690,
+          300
+        ]
+      ],
+      "color": "wear-fab",
+      "phase": 6.1,
+      "start": 1
+    },
+    {
+      "points": [
+        [
+          750,
+          140
+        ],
+        [
+          880,
+          140
+        ]
+      ],
+      "color": "wear-env",
+      "phase": 3
+    },
+    {
+      "points": [
+        [
+          760,
+          300
+        ],
+        [
+          880,
+          300
+        ]
+      ],
+      "color": "wear-env",
+      "phase": 5.2,
+      "start": 1
+    },
+    {
+      "points": [
+        [
+          800,
+          430
+        ],
+        [
+          1120,
+          430
+        ]
+      ],
+      "color": "wear-exp",
+      "phase": 4.3
+    },
+    {
+      "points": [
+        [
+          950,
+          230
+        ],
+        [
+          1150,
+          230
+        ]
+      ],
+      "color": "vest",
+      "phase": 3.7,
+      "start": 1
+    },
+    {
+      "points": [
+        [
+          580,
+          420
+        ],
+        [
+          720,
+          420
+        ]
+      ],
+      "color": "vest",
+      "phase": 2.4
+    }
+  ],
+  "incident": {
+    "room": "fab",
+    "spreadInterval": 2.6,
+    "containInterval": 0.9,
+    "maxRing": 3,
+    "cleanDuration": 10
+  },
+  "tour": {
+    "_": "Recorrido guiado.",
+    "zoomLimit": 3.2,
+    "stops": [
+      {
+        "room": null,
+        "title": "Planta baja",
+        "text": "Recorrido por el circuito de un lote, desde que el camión descarga hasta que el palé queda en cuarentena.",
+        "seconds": 7
+      },
+      {
+        "room": "mp",
+        "title": "1 · Recepción",
+        "text": "El camión descarga en el muelle. La materia prima se registra y se muestrea antes de entrar en el circuito de producción.",
+        "seconds": 9
+      },
+      {
+        "room": "pes",
+        "title": "2 · Pesaje",
+        "text": "Se dispensan las cantidades de cada componente. Desde aquí el lote pasa por la exclusa a la zona de fabricación.",
+        "seconds": 9
+      },
+      {
+        "room": "fab",
+        "title": "3 · Fabricación",
+        "text": "Los reactores procesan el lote. La sala admite un lote cada vez: si está ocupada, el siguiente espera turno antes de entrar.",
+        "seconds": 10
+      },
+      {
+        "room": "env",
+        "title": "4 · Envasado",
+        "text": "El producto se envasa y se paletiza. La cinta alimenta las líneas mientras la sala está en proceso.",
+        "seconds": 9
+      },
+      {
+        "room": "apt",
+        "title": "5 · Cuarentena",
+        "text": "El palé acabado espera en cuarentena a que Calidad lo libere. A partir de ahí queda disponible para servir.",
+        "seconds": 9
+      }
+    ]
+  }
+}
