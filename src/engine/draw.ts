@@ -10,6 +10,11 @@ import type { Scene, StaticPiece } from './scene';
 import type { Simulation } from './sim';
 import type { PlantData, Room, RoomState } from './types';
 
+const COS = Math.cos(Math.PI / 6);
+const LABEL_FONT = '500 11px "IBM Plex Sans",system-ui,sans-serif';
+/** Por debajo de esta escala los rótulos de zona estorban más que ayudan. */
+const MARKER_MIN_SCALE = 0.45;
+
 const FLOOR: Record<string, string> = {
   prod: 'floor-prod',
   corr: 'floor-corr',
@@ -221,23 +226,31 @@ export function drawFrame(input: DrawInput): void {
     g.fill();
   }
 
+  // Una etiqueta solo se dibuja si la sala es más ancha en pantalla que el
+  // propio rótulo. Sin esto, al alejarse se amontonan todas y no se lee nada.
+  g.font = LABEL_FONT;
   for (const r of plant.rooms) {
     if (!r.short) continue;
+    const anchoSala = (r.x1 - r.x0 + (r.y1 - r.y0)) * COS * iso.view.s;
+    if (anchoSala < g.measureText(r.short).width + 22) continue;
     const c = r.label ?? [(r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2];
     const [px, py] = P(c[0], c[1], 0);
     const s = plant.stateOf(r);
     pill(iso, r.short, px, py, s === 'ok' ? null : s);
   }
-  for (const m of data.markers) {
-    const [px, py] = P(m.x - ofx, m.y - ofy, 0);
-    pill(iso, m.text, px, py, m.token);
+  // Los rótulos de zona desaparecen juntos por debajo de cierta escala.
+  if (iso.view.s >= MARKER_MIN_SCALE) {
+    for (const m of data.markers) {
+      const [px, py] = P(m.x - ofx, m.y - ofy, 0);
+      pill(iso, m.text, px, py, m.token);
+    }
   }
 }
 
 /** Etiqueta flotante con punto de color opcional. */
 function pill(iso: Iso, text: string, sx: number, sy: number, token: string | null): void {
   const g = iso.g;
-  g.font = '500 11px "IBM Plex Sans",system-ui,sans-serif';
+  g.font = LABEL_FONT;
   const tw = g.measureText(text).width;
   const w = tw + (token ? 19 : 12);
   const h = 18;

@@ -274,7 +274,13 @@ export class PlantEngine {
     // el zoom al mínimo se vea el plano entero sin recortes.
     const b = this.bounds;
     const fit = this.camera.fitScale(cw, PAD);
-    const ch = Math.max(MIN_HEIGHT, Math.ceil((b.maxY - b.minY) * fit + 2 * PAD));
+    const necesario = Math.ceil((b.maxY - b.minY) * fit + 2 * PAD);
+    // El mínimo da margen para acercarse, pero se recorta por dos lados: nunca
+    // más de media pantalla —en un móvil en horizontal el plano se iría fuera de
+    // cuadro— ni más del doble de lo que ocupa el plano, para no dejar el lienzo
+    // medio vacío cuando la planta es mucho más ancha que alta.
+    const holgura = Math.min(MIN_HEIGHT, Math.round(window.innerHeight * 0.5), necesario * 2);
+    const ch = Math.max(necesario, holgura);
 
     const canvas = this.opts.canvas;
     canvas.width = Math.round(cw * this.dpr);

@@ -48,6 +48,10 @@ Cosas que cuesta volver a descubrir:
   centro). Con una superficie grande y plana eso tapa por la base a lo que se
   apoya encima. Las superficies así van en `platforms`, que se dibujan con los
   suelos, y lo que se apoye lleva `z0`.
+- **Las etiquetas de sala solo se dibujan si caben.** Una sala cuya anchura en
+  pantalla sea menor que su propio rótulo no lo muestra, y los rótulos de zona
+  desaparecen juntos por debajo de cierta escala. Sin esa regla, al alejarse se
+  amontonan todas y el plano se vuelve ilegible.
 - **Los datos del plano se compilan dentro del bundle.** Sacar un fichero de git
   no lo saca de lo que se sirve al navegador.
 - El encuadre no está codificado a mano: `engine/bounds.ts` proyecta todo lo
@@ -97,7 +101,5 @@ Por orden de lo que más aporta respecto al trabajo que cuesta.
     git, a medio plazo lo sensato es trabajar solo en la rama limpia.
 11. **Supabase.** Salas, puertas, lotes y eventos en base de datos, en vez de
     todo en el JSON.
-12. **Revisar en móvil y tableta.** El diseño es de escritorio. Con la cámara ya
-    se puede explorar en pantalla pequeña, pero no está comprobado.
 
 @NOTAS-PLANTA.local.md
