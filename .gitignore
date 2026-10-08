@@ -15,3 +15,6 @@ referencia/
 
 # Notas de trabajo con datos de la instalación real.
 *.local.md
+
+dist-offline
+planta-offline.html

@@ -9,3 +9,6 @@ referencia/
 
 node_modules
 dist
+
+dist-offline
+planta-offline.html

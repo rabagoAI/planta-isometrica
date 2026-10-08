@@ -178,6 +178,35 @@ recuerda la elección en `localStorage`. Sin él, quien tenga el sistema en oscu
 no puede ver nunca el tema claro. Un script en `index.html` aplica el tema
 guardado antes del primer pintado para que no parpadee al recargar.
 
+## Enseñar un plano real sin publicarlo
+
+El despliegue público siempre muestra la planta ficticia. Para enseñar un plano
+real a gente de la propia empresa hay tres caminos, ninguno de los cuales lo
+saca a internet:
+
+| Para | Comando | Quién lo ve |
+| --- | --- | --- |
+| Tu propia pantalla o un proyector | `npm run dev` | solo tú |
+| Que lo abran desde sus equipos | `npm run dev:lan` | quien esté en la misma red |
+| Dejarlo en un disco compartido o un pendrive | `npm run build:offline` | quien tenga el fichero |
+
+`dev:lan` arranca el mismo servidor escuchando en la red local; Vite imprime la
+dirección (`http://192.168.x.x:5173`) que tienen que abrir los demás. Mientras
+esté arrancado, cualquiera de esa red puede entrar: para una red corporativa
+suele estar bien, pero no lo dejes corriendo en una red abierta.
+
+`build:offline` genera **un único `planta-offline.html`** de unos 300 KB que se
+abre con doble clic, sin servidor y sin conexión. Hace falta incrustar el
+JavaScript dentro del HTML porque los navegadores bloquean la carga de módulos
+desde `file://`: el origen es `null` y salta CORS. Un módulo escrito dentro de la
+página no se descarga, así que sí se ejecuta.
+
+Ese fichero **lleva dentro el plano que se haya compilado**. Si tienes
+`plant.local.json`, es el plano real: trátalo como tratarías el plano en papel.
+Está en `.gitignore` y en `.vercelignore`, pero nada impide adjuntarlo en un
+correo o subirlo a una carpeta que sincronice fuera. Las tipografías se cargan de
+Google Fonts, así que sin conexión se ven con las del sistema.
+
 ## Despliegue
 
 Configurado para Vercel (`vercel.json`): framework Vite, `npm run build`, salida
