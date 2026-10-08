@@ -39,6 +39,11 @@ Cosas que cuesta volver a descubrir:
   el reset de cámara o el recorrido guiado están rotos. No lo están: todo lo
   síncrono (botones, zoom) sigue respondiendo. Para probar sin ventana visible,
   llamar al bucle a mano con marcas de tiempo crecientes.
+- **El bucle recorta el delta de tiempo a 0,05 s.** Es una salvaguarda contra
+  saltos bruscos, pero significa que por debajo de 20 fps la simulación corre
+  más lenta que el tiempo real: a 5 fps avanza unas cuatro veces más despacio.
+  Si el reloj de planta parece ir lento, mide los fotogramas antes de buscar el
+  fallo en la simulación.
 - **El orden de pintado usa una sola profundidad por pieza** (`x + y` del
   centro). Con una superficie grande y plana eso tapa por la base a lo que se
   apoya encima. Las superficies así van en `platforms`, que se dibujan con los
