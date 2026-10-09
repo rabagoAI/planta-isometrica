@@ -89,7 +89,9 @@ export function drawFrame(input: DrawInput): void {
     const pts = [P(r.x0, r.y0, 0), P(r.x1, r.y0, 0), P(r.x1, r.y1, 0), P(r.x0, r.y1, 0)];
     iso.poly(pts, iso.col.value[FLOOR[r.kind]!]!);
     const s = plant.stateOf(r);
-    const a = tint(s, iso.t);
+    // Un estado puesto a mano trae su propia opacidad, sin parpadeo.
+    const manual = plant.modeState(r);
+    const a = manual ? manual.tint : tint(s, iso.t);
     if (a > 0) iso.poly(pts, iso.col.rgba(s, a));
   }
 
@@ -149,10 +151,13 @@ export function drawFrame(input: DrawInput): void {
 
   // Cada lote en planta, con el operario que lo empuja detrás.
   for (const lot of sim.lots) {
-    const lx = lot.x - ofx;
-    const ly = lot.y - ofy;
-    const ox = lot.x - lot.dx * 15 - ofx;
-    const oy = lot.y - lot.dy * 15 - ofy;
+    // Los que esperan por la misma sala se escalonan hacia atrás por su ruta,
+    // para que hagan fila en vez de amontonarse en el mismo punto.
+    const atras = lot.queued ? data.lot.queueGap * lot.rank : 0;
+    const lx = lot.x - lot.dx * atras - ofx;
+    const ly = lot.y - lot.dy * atras - ofy;
+    const ox = lot.x - lot.dx * (atras + 15) - ofx;
+    const oy = lot.y - lot.dy * (atras + 15) - ofy;
     // El color del palé dice de un vistazo en qué situación está.
     const token = lot.held ? 'alert' : lot.queued ? 'clean' : 'prod';
     const wear = wearAt(plant, data, ox, oy);
@@ -193,10 +198,37 @@ export function drawFrame(input: DrawInput): void {
     }
   }
 
+  // Escena propia del estado manual de la sala: enseres, personal y vapor.
+  const salaModos = plant.byId[plant.modes.room];
+  const modo = salaModos ? plant.modeState(salaModos) : null;
+  if (modo) {
+    for (const pr of modo.props ?? []) {
+      const x = pr.x - ofx;
+      const y = pr.y - ofy;
+      add(x + pr.w / 2 + y + pr.d / 2, (i2) => i2.box(x, y, pr.w, pr.d, pr.h, 0, pr.token));
+    }
+    for (const w of sim.modeCrew) {
+      const x = w.x - ofx;
+      const y = w.y - ofy;
+      add(x + y, (i2) => person(i2, x, y, i2.col.value[w.color]!, w.phase, w.moving));
+    }
+  }
+
   list.sort((p, q) => p.dp - q.dp);
   for (const e of list) e.draw(iso);
 
   /* ---------- contornos, chincheta y etiquetas ---------- */
+
+  if (modo?.steam) {
+    for (const [sx, sy] of modo.steam) steam(iso, sx - ofx, sy - ofy);
+  }
+  // Señalización de advertencia cuando el producto la exige.
+  const tipo = salaModos ? plant.modeType(salaModos) : null;
+  if (tipo?.warn && salaModos) {
+    const c = salaModos.label ?? [(salaModos.x0 + salaModos.x1) / 2, (salaModos.y0 + salaModos.y1) / 2];
+    const [wx, wy] = P(c[0], c[1], 54 + Math.sin(iso.t * 2.4) * 2);
+    warnSign(iso, wx, wy, tipo.token);
+  }
 
   if (hover) {
     const pts = [P(hover.x0, hover.y0, 0), P(hover.x1, hover.y0, 0), P(hover.x1, hover.y1, 0), P(hover.x0, hover.y1, 0)];
@@ -245,6 +277,41 @@ export function drawFrame(input: DrawInput): void {
       pill(iso, m.text, px, py, m.token);
     }
   }
+}
+
+/** Columna de vapor, para la sala en limpieza. */
+function steam(iso: Iso, x: number, y: number): void {
+  const g = iso.g;
+  const u = iso.view.s;
+  for (let i = 0; i < 5; i++) {
+    const f = (iso.t * 0.4 + i / 5) % 1;
+    const [px, py] = iso.p(x, y, 4 + f * 46);
+    g.fillStyle = iso.col.rgba('truck-box', 0.4 * (1 - f));
+    g.beginPath();
+    g.arc(px + Math.sin(f * 5 + i) * 4 * u, py, (3 + f * 7) * u, 0, 7);
+    g.fill();
+  }
+}
+
+/** Triángulo de advertencia flotando sobre la sala. */
+function warnSign(iso: Iso, sx: number, sy: number, token: string): void {
+  const g = iso.g;
+  const r = 13;
+  g.beginPath();
+  g.moveTo(sx, sy - r);
+  g.lineTo(sx + r * 0.92, sy + r * 0.62);
+  g.lineTo(sx - r * 0.92, sy + r * 0.62);
+  g.closePath();
+  g.fillStyle = iso.col.value[token]!;
+  g.fill();
+  g.strokeStyle = iso.col.rgba('surface', 0.9);
+  g.lineWidth = 2;
+  g.stroke();
+  g.fillStyle = iso.col.value['surface']!;
+  g.font = 'bold 13px system-ui,sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText('!', sx, sy + 3);
 }
 
 /** Etiqueta flotante con punto de color opcional. */

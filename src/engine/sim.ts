@@ -26,6 +26,8 @@ export interface LotState {
   slotX: number;
   /** Esperando a que se libere la sala de destino. */
   queued: boolean;
+  /** Puesto en la cola; separa a los que esperan por la misma sala. */
+  rank: number;
 }
 
 export interface ForkliftState {
@@ -41,6 +43,8 @@ export interface ForkliftState {
 
 export interface WalkerState {
   points: [number, number][];
+  /** Velocidad propia; por defecto la general de los operarios. */
+  speed?: number;
   i: number;
   x: number;
   y: number;
@@ -83,6 +87,8 @@ export class Simulation {
   truck: { x: number; y: number; phase: TruckPhase };
   forklifts: ForkliftState[];
   walkers: WalkerState[];
+  /** Personal que solo existe mientras la sala está en cierto estado. */
+  modeCrew: WalkerState[] = [];
 
   private truckWait = 0;
   /** El camión ya ha soltado su palé en esta parada. */
@@ -124,7 +130,22 @@ export class Simulation {
         moving: false,
       };
     });
+    this.rebuildModeCrew();
     this.log('Turno de mañana iniciado');
+  }
+
+  /** Rehace el personal de limpieza o mantenimiento al cambiar de estado. */
+  rebuildModeCrew(): void {
+    const sala = this.plant.byId[this.plant.modes.room];
+    const def = sala ? this.plant.modeState(sala) : null;
+    this.modeCrew = (def?.crew ?? []).map((c, i) => {
+      const inicio = c.points[0]!;
+      return {
+        points: c.points, i: 0, x: inicio[0], y: inicio[1], wait: 0,
+        color: c.color, phase: i * 1.7, lab: false, moving: false,
+        speed: c.speed,
+      };
+    });
   }
 
   /* ---------- reloj y registro ---------- */
@@ -201,6 +222,7 @@ export class Simulation {
       held: false,
       moving: false,
       queued: false,
+      rank: 0,
       slot: k,
       slotX: this.slotX(k),
     };
@@ -295,22 +317,38 @@ export class Simulation {
     const dist = Math.hypot(dx, dy);
     const adv = this.data.lot.speed * dt;
 
+    const dest = this.targetRoom(lot);
+
+    // Una sala cerrada a mano —en limpieza, sucia o en mantenimiento— no se
+    // cruza, ni para trabajar ni de paso. El lote espera donde esté, fuera.
+    // Esta comprobación va antes del tramo con parada: la ruta entra en la sala
+    // por puntos intermedios y, si se mirara solo al llegar al de trabajo, el
+    // lote ya estaría dentro.
+    if (dest && this.plant.modeState(dest)?.blocksProduction && this.roomOf(lot) !== dest) {
+      // El puesto se recalcula cada fotograma: si uno de delante sale, el resto avanza.
+      lot.rank = this.queueRank(lot, dest);
+      if (!lot.queued) {
+        lot.queued = true;
+        this.log('Lote ' + lot.id + ' espera a que se libere ' + (dest.short || dest.name));
+      }
+      return;
+    }
+
     // Una sala de producción procesa un lote cada vez: si está ocupada, el que
     // llega se detiene antes de entrar y hace cola según su turno.
-    if (step.wait) {
-      const dest = this.targetRoom(lot);
-      if (dest && dest.kind === 'prod' && this.workingIn(dest, lot)) {
-        const hold = this.data.lot.queueGap * (1 + this.queueRank(lot, dest));
-        if (dist <= hold) {
-          if (!lot.queued) {
-            lot.queued = true;
-            this.log('Lote ' + lot.id + ' espera turno para ' + (dest.short || dest.name));
-          }
-          return;
+    if (step.wait && dest && dest.kind === 'prod' && this.workingIn(dest, lot)) {
+      lot.rank = this.queueRank(lot, dest);
+      const hold = this.data.lot.queueGap * (1 + lot.rank);
+      if (dist <= hold) {
+        if (!lot.queued) {
+          lot.queued = true;
+          this.log('Lote ' + lot.id + ' espera turno para ' + (dest.short || dest.name));
         }
+        return;
       }
     }
     lot.queued = false;
+    lot.rank = 0;
 
     if (dist <= adv) {
       lot.x = tx;
@@ -334,14 +372,14 @@ export class Simulation {
   /* ---------- operarios, toro, camión ---------- */
 
   private updateWalkers(dt: number): void {
-    for (const w of this.walkers) {
+    for (const w of [...this.walkers, ...this.modeCrew]) {
       w.moving = false;
       if (w.wait > 0) { w.wait -= dt; continue; }
       const n = w.points[w.i]!;
       const dx = n[0] - w.x;
       const dy = n[1] - w.y;
       const dist = Math.hypot(dx, dy);
-      const adv = 42 * dt;
+      const adv = (w.speed ?? 42) * dt;
       if (dist <= adv) {
         w.x = n[0];
         w.y = n[1];
@@ -526,6 +564,7 @@ export class Simulation {
       if (x - ofx >= r.x0 && x - ofx < r.x1 && y - ofy >= r.y0 && y - ofy < r.y1) n++;
     };
     for (const w of this.walkers) count(w.x, w.y);
+    for (const w of this.modeCrew) count(w.x, w.y);
     for (const s of seated) count(s[0], s[1]);
     for (const lot of this.lots) count(lot.x - lot.dx * 15, lot.y - lot.dy * 15);
     for (const f of this.forklifts) count(f.x, f.y);

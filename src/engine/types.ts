@@ -47,6 +47,10 @@ export interface Room extends Omit<RoomData, 'label'> {
   act: boolean;
   /** Segundos de limpieza que quedan. */
   clean: number;
+  /** Estado elegido a mano; manda sobre el que deduce la simulación. */
+  mode: string | null;
+  /** Tipo de producto en fabricación. */
+  product: string | null;
   /** Salas comunicadas por una puerta. */
   adj: Set<Room>;
   sens: Sensors | null;
@@ -98,6 +102,40 @@ export interface NoteItem { note: string; type?: undefined }
 
 export type EquipmentItem =
   | BoxItem | CylItem | RackItem | TreeItem | StackItem | SeatedItem | NoteItem;
+
+/** Un estado manual de sala, con la escena que lleva asociada. */
+export interface RoomModeState {
+  id: string;
+  label: string;
+  /** Token de color del velo. */
+  token: ColorToken;
+  tint: number;
+  /** Con la sala así, ningún lote puede entrar a trabajar. */
+  blocksProduction: boolean;
+  /** Personal propio de ese estado: limpieza, mantenimiento… */
+  crew?: { points: [number, number][]; color: ColorToken; speed?: number }[];
+  /** Enseres que solo aparecen en ese estado. */
+  props?: { x: number; y: number; w: number; d: number; h: number; token: ColorToken }[];
+  /** Puntos de los que sale vapor. */
+  steam?: [number, number][];
+}
+
+/** Tipo de producto en fabricación. */
+export interface RoomModeType {
+  id: string;
+  label: string;
+  token: ColorToken;
+  /** Requiere señalización de advertencia visible. */
+  warn?: boolean;
+}
+
+export interface RoomModes {
+  /** Sala a la que se aplican. */
+  room: string;
+  states: RoomModeState[];
+  types: RoomModeType[];
+  default: { state: string; type: string };
+}
 
 export interface ZoneData {
   x0: number; y0: number; x1: number; y1: number;
@@ -152,6 +190,8 @@ export interface PlantData {
     /** Sala → token de color. */
     byRoom: Record<string, ColorToken>;
   };
+  /** Estados manuales de sala y tipos de producto. */
+  roomModes: RoomModes;
   rooms: RoomData[];
   doors: DoorData[];
   walls: {
@@ -262,6 +302,13 @@ export interface RoomSnapshot {
   people: number;
   /** Lotes que hay ahora mismo en la sala. */
   lotIds: string[];
+  /** Estado manual y tipo de producto, solo en la sala que los admite. */
+  modes: {
+    stateId: string;
+    typeId: string;
+    states: { id: string; label: string }[];
+    types: { id: string; label: string; warn: boolean }[];
+  } | null;
   sensors: Sensors | null;
   restricted: boolean;
 }

@@ -17,6 +17,9 @@ separado de React, paneles en React.
 - `src/data/plant.ts`: elige cuál de los dos se usa.
 - `src/engine/`: proyección isométrica, dibujo, cámara y simulación. TypeScript
   puro, sin React.
+- `roomModes` en los datos: estados manuales de una sala (limpia, en limpieza,
+  sucia, en mantenimiento) y tipo de producto. Cada estado trae su propia
+  escena: personal, enseres, vapor y velo de color.
 - `src/components/PlantCanvas.tsx`: monta el canvas y el bucle `requestAnimationFrame`.
 - `src/components/`: resumen, seguimiento de lote, ficha de sala, registro.
 - `src/store/`: estado para los paneles, actualizado ~4 veces por segundo.
@@ -71,35 +74,44 @@ Por orden de lo que más aporta respecto al trabajo que cuesta.
    el navegador, y ya se ha roto alguna vez sin que saltara nada.
 
 ### Funcionalidad
-2. **Trazabilidad por lote.** Un lote llega a cuarentena y desaparece: no se
+2. **Pantalla dedicada de sala.** Una vista a pantalla completa de una sola
+   sala, con los desplegables de estado y tipo en grande, pensada para dejarla
+   fija en un monitor de planta. Los estados y su animación ya están; falta el
+   encuadre dedicado.
+3. **Leer el estado de donde ya está.** Hoy el estado se elige a mano en un
+   desplegable, pero en planta ya se introduce en otra aplicación. Mientras sean
+   dos sitios se van a descuadrar. Conviene averiguar dónde guarda ese dato
+   —base de datos, hoja de cálculo, ERP— y leerlo de ahí, dejando el desplegable
+   como respaldo manual.
+4. **Trazabilidad por lote.** Un lote llega a cuarentena y desaparece: no se
    puede preguntar qué le pasó. Guardar hora de entrada en cada sala, duración
    por etapa, retenciones y motivo, y poder consultar lotes ya cerrados. Es
    además lo que define qué datos hacen falta para conectar un ERP.
-3. **Modo editor del plano.** Mover salas y equipos desde la interfaz y exportar
+5. **Modo editor del plano.** Mover salas y equipos desde la interfaz y exportar
    el JSON, en vez de editarlo a mano.
-4. **Niveles conmutables.** Generalizar los datos a varias plantas con un
+6. **Niveles conmutables.** Generalizar los datos a varias plantas con un
    selector, en vez de un único plano.
 
 ### Aspecto y legibilidad
-5. **Muros que tapan.** Los muros miden 20 y algunas salas estrechas tienen
+7. **Muros que tapan.** Los muros miden 20 y algunas salas estrechas tienen
    menos fondo aparente que eso, así que su propio muro frontal se come lo que
    hay dentro. Opciones: bajar la altura, volverlos translúcidos cuando tapan la
    sala seleccionada, o girar la vista en cuatro orientaciones. Lo último toca
    el orden de profundidad, así que conviene hacerlo en solitario.
-6. **Transiciones de estado.** Cuando una sala cambia de estado el velo de color
+8. **Transiciones de estado.** Cuando una sala cambia de estado el velo de color
    aparece de golpe. Interpolarlo.
-7. **Hora del día.** El reloj de turno avanza pero no cambia nada visual.
+9. **Hora del día.** El reloj de turno avanza pero no cambia nada visual.
    Desplazar la paleta y la dirección de las sombras con la hora.
-8. **Más vida.** Vapor en la sala técnica, extractores girando, cajas en más
+10. **Más vida.** Vapor en la sala técnica, extractores girando, cajas en más
    cintas.
 
 ### Infraestructura
-9. **Desplegar en Vercel.** Importar el repositorio desde vercel.com/new. El
+11. **Desplegar en Vercel.** Importar el repositorio desde vercel.com/new. El
    `vercel.json` ya lo deja configurado y no hay variables de entorno.
-10. **Repensar las dos ramas.** La rama de trabajo y la publicable divergen y
+12. **Repensar las dos ramas.** La rama de trabajo y la publicable divergen y
     hay que ir sincronizándolas a mano. Como el plano real ya nunca entra en
     git, a medio plazo lo sensato es trabajar solo en la rama limpia.
-11. **Supabase.** Salas, puertas, lotes y eventos en base de datos, en vez de
+13. **Supabase.** Salas, puertas, lotes y eventos en base de datos, en vez de
     todo en el JSON.
 
 @NOTAS-PLANTA.local.md

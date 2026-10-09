@@ -22,6 +22,175 @@
       "mp": "wear-exp"
     }
   },
+  "roomModes": {
+    "_": "Estados manuales de la sala de fabricación y tipo de producto. El estado manda sobre el automático y decide la animación.",
+    "room": "fab",
+    "states": [
+      {
+        "id": "limpia",
+        "label": "Sala limpia",
+        "token": "ok",
+        "tint": 0.13,
+        "blocksProduction": false,
+        "crew": [
+          {
+            "points": [
+              [
+                500,
+                288
+              ],
+              [
+                556,
+                304
+              ]
+            ],
+            "color": "wear-fab"
+          }
+        ]
+      },
+      {
+        "id": "limpieza",
+        "label": "Sala en proceso de limpieza",
+        "token": "clean",
+        "tint": 0.22,
+        "blocksProduction": true,
+        "crew": [
+          {
+            "points": [
+              [
+                500,
+                288
+              ],
+              [
+                556,
+                304
+              ]
+            ],
+            "color": "wear-fab",
+            "speed": 30
+          },
+          {
+            "points": [
+              [
+                640,
+                288
+              ],
+              [
+                700,
+                304
+              ]
+            ],
+            "color": "wear-fab",
+            "speed": 30
+          }
+        ],
+        "props": [
+          {
+            "x": 530,
+            "y": 280,
+            "w": 16,
+            "d": 10,
+            "h": 8,
+            "token": "tank"
+          }
+        ],
+        "steam": [
+          [
+            540,
+            286
+          ],
+          [
+            670,
+            286
+          ]
+        ]
+      },
+      {
+        "id": "sucia",
+        "label": "Sala sucia",
+        "token": "off",
+        "tint": 0.2,
+        "blocksProduction": true,
+        "props": [
+          {
+            "x": 560,
+            "y": 292,
+            "w": 12,
+            "d": 9,
+            "h": 5,
+            "token": "carton2"
+          },
+          {
+            "x": 660,
+            "y": 298,
+            "w": 10,
+            "d": 8,
+            "h": 4,
+            "token": "wood"
+          }
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "label": "Sala en mantenimiento",
+        "token": "risk",
+        "tint": 0.19,
+        "blocksProduction": true,
+        "crew": [
+          {
+            "points": [
+              [
+                600,
+                296
+              ],
+              [
+                600,
+                296
+              ]
+            ],
+            "color": "vest"
+          }
+        ],
+        "props": [
+          {
+            "x": 616,
+            "y": 294,
+            "w": 14,
+            "d": 10,
+            "h": 6,
+            "token": "dark"
+          }
+        ]
+      }
+    ],
+    "types": [
+      {
+        "id": "estandar",
+        "label": "Línea estándar",
+        "token": "prod"
+      },
+      {
+        "id": "sin-alerg",
+        "label": "Línea sin alérgenos",
+        "token": "ok"
+      },
+      {
+        "id": "con-alerg",
+        "label": "Línea con alérgenos",
+        "token": "alert",
+        "warn": true
+      },
+      {
+        "id": "industrial",
+        "label": "Línea industrial",
+        "token": "clean"
+      }
+    ],
+    "default": {
+      "state": "limpia",
+      "type": "estandar"
+    }
+  },
   "rooms": [
     {
       "id": "vest",

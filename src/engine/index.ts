@@ -423,6 +423,29 @@ export class PlantEngine {
     }
   }
 
+  /** Pone a mano el estado de una sala: limpia, en limpieza, sucia, parada. */
+  setRoomMode(roomId: string, stateId: string): void {
+    const r = this.plant.byId[roomId];
+    if (!r || this.plant.modes.room !== roomId) return;
+    if (r.mode === stateId) return;
+    r.mode = stateId;
+    this.sim.rebuildModeCrew();
+    const def = this.plant.modes.states.find((x) => x.id === stateId);
+    if (def) this.sim.log((r.short || r.name) + ': ' + def.label.toLowerCase());
+    this.publish();
+  }
+
+  /** Cambia el tipo de producto que se fabrica en una sala. */
+  setRoomProduct(roomId: string, typeId: string): void {
+    const r = this.plant.byId[roomId];
+    if (!r || this.plant.modes.room !== roomId) return;
+    if (r.product === typeId) return;
+    r.product = typeId;
+    const def = this.plant.modes.types.find((x) => x.id === typeId);
+    if (def) this.sim.log((r.short || r.name) + ': fabricación ' + def.label);
+    this.publish();
+  }
+
   /** Cambia el lote que detallan los paneles. */
   focusLot(id: string): void {
     this.sim.focusedLotId = id;
@@ -509,6 +532,9 @@ export class PlantEngine {
 
     const r = this.selected;
     const state = plant.stateOf(r);
+    // Con un estado puesto a mano manda su nombre, que es el que se usa en
+    // planta, no el genérico del motor.
+    const modoSala = plant.modeState(r);
     const focused = sim.focusedLot();
 
     this.opts.onSnapshot({
@@ -533,10 +559,18 @@ export class PlantEngine {
         id: r.id,
         name: r.name,
         state,
-        stateLabel: STATE_LABEL[state],
+        stateLabel: r.inc ? STATE_LABEL[state] : (modoSala?.label ?? STATE_LABEL[state]),
         area: r.area,
         people: sim.peopleIn(r, this.scene.seated),
         lotIds: sim.lotsIn(r).map((l) => l.id),
+        modes: plant.modes.room === r.id
+          ? {
+              stateId: r.mode ?? '',
+              typeId: r.product ?? '',
+              states: plant.modes.states.map((x) => ({ id: x.id, label: x.label })),
+              types: plant.modes.types.map((x) => ({ id: x.id, label: x.label, warn: !!x.warn })),
+            }
+          : null,
         sensors: r.sens ? { ...r.sens } : null,
         restricted: r.inc === 'alert',
       },

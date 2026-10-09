@@ -3,7 +3,9 @@
  * y deduce la adyacencia a partir de las puertas (la usa el contagio de desviaciones).
  */
 
-import type { DoorData, PlantData, Room, RoomState } from './types';
+import type {
+  DoorData, PlantData, Room, RoomModeState, RoomModeType, RoomModes, RoomState,
+} from './types';
 
 export const STATE_LABEL: Record<RoomState, string> = {
   prod: 'En proceso',
@@ -22,10 +24,12 @@ export class Plant {
   readonly byId: Record<string, Room> = {};
   readonly doors: Door[];
   readonly origin: { x: number; y: number };
+  readonly modes: RoomModes;
 
   constructor(data: PlantData) {
     const { x: ofx, y: ofy } = data.meta.origin;
     this.origin = data.meta.origin;
+    this.modes = data.roomModes;
 
     this.rooms = data.rooms.map((r) => ({
       id: r.id,
@@ -42,6 +46,8 @@ export class Plant {
       inc: null,
       act: false,
       clean: 0,
+      mode: null,
+      product: null,
       adj: new Set<Room>(),
       // Solo las salas de producción están instrumentadas.
       sens: r.kind === 'prod'
@@ -49,6 +55,12 @@ export class Plant {
         : null,
     }));
     for (const r of this.rooms) this.byId[r.id] = r;
+
+    const sala = this.byId[this.modes.room];
+    if (sala) {
+      sala.mode = this.modes.default.state;
+      sala.product = this.modes.default.type;
+    }
 
     this.doors = data.doors.map((d: DoorData) => {
       const h = d.axis === 'h';
@@ -80,8 +92,27 @@ export class Plant {
     return null;
   }
 
-  /** Estado efectivo: la incidencia manda, luego la actividad, luego el estado base. */
+  /**
+   * Estado efectivo. Una desviación manda sobre todo; después el estado elegido
+   * a mano, que es información de planta y pesa más que lo que deduzca la
+   * simulación; y por último la actividad y el estado base.
+   */
   stateOf(r: Room): RoomState {
-    return r.inc ?? (r.act ? 'prod' : r.base);
+    if (r.inc) return r.inc;
+    const manual = this.modeState(r);
+    if (manual) return manual.token as RoomState;
+    return r.act ? 'prod' : r.base;
+  }
+
+  /** Definición del estado manual de una sala, si tiene uno puesto. */
+  modeState(r: Room): RoomModeState | null {
+    if (!r.mode || this.modes.room !== r.id) return null;
+    return this.modes.states.find((s) => s.id === r.mode) ?? null;
+  }
+
+  /** Tipo de producto de una sala, si procede. */
+  modeType(r: Room): RoomModeType | null {
+    if (!r.product || this.modes.room !== r.id) return null;
+    return this.modes.types.find((t) => t.id === r.product) ?? null;
   }
 }

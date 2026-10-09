@@ -93,6 +93,8 @@ export default function App() {
             room={snapshot.room}
             options={roomOptions}
             onSelect={(id) => engineRef.current?.selectRoom(id)}
+            onMode={(roomId, stateId) => engineRef.current?.setRoomMode(roomId, stateId)}
+            onProduct={(roomId, typeId) => engineRef.current?.setRoomProduct(roomId, typeId)}
           />
           <LogPanel log={snapshot.log} />
         </section>
