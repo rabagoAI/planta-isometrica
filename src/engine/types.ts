@@ -49,8 +49,6 @@ export interface Room extends Omit<RoomData, 'label'> {
   clean: number;
   /** Estado elegido a mano; manda sobre el que deduce la simulación. */
   mode: string | null;
-  /** Tipo de producto en fabricación. */
-  product: string | null;
   /** Salas comunicadas por una puerta. */
   adj: Set<Room>;
   sens: Sensors | null;
@@ -103,16 +101,24 @@ export interface NoteItem { note: string; type?: undefined }
 export type EquipmentItem =
   | BoxItem | CylItem | RackItem | TreeItem | StackItem | SeatedItem | NoteItem;
 
-/** Un estado manual de sala, con la escena que lleva asociada. */
+/**
+ * Un estado de la sala. Son excluyentes: o se fabrica algo concreto, o la sala
+ * está en uno de los estados de servicio.
+ */
 export interface RoomModeState {
   id: string;
   label: string;
-  /** Token de color del velo. */
+  /** Familia a la que pertenece, para agrupar el desplegable. */
+  group: string;
   token: ColorToken;
   tint: number;
-  /** Con la sala así, ningún lote puede entrar a trabajar. */
+  /** Con la sala así, ningún lote puede entrar ni pasar. */
   blocksProduction: boolean;
-  /** Personal propio de ese estado: limpieza, mantenimiento… */
+  /** Se está fabricando: los reactores trabajan. */
+  producing: boolean;
+  /** Requiere señalización de advertencia visible. */
+  warn?: boolean;
+  /** Personal propio del estado: producción, limpieza, mantenimiento… */
   crew?: { points: [number, number][]; color: ColorToken; speed?: number }[];
   /** Enseres que solo aparecen en ese estado. */
   props?: { x: number; y: number; w: number; d: number; h: number; token: ColorToken }[];
@@ -120,21 +126,12 @@ export interface RoomModeState {
   steam?: [number, number][];
 }
 
-/** Tipo de producto en fabricación. */
-export interface RoomModeType {
-  id: string;
-  label: string;
-  token: ColorToken;
-  /** Requiere señalización de advertencia visible. */
-  warn?: boolean;
-}
-
 export interface RoomModes {
   /** Sala a la que se aplican. */
   room: string;
   states: RoomModeState[];
-  types: RoomModeType[];
-  default: { state: string; type: string };
+  /** Estado de partida. */
+  default: string;
 }
 
 export interface ZoneData {
@@ -302,12 +299,10 @@ export interface RoomSnapshot {
   people: number;
   /** Lotes que hay ahora mismo en la sala. */
   lotIds: string[];
-  /** Estado manual y tipo de producto, solo en la sala que los admite. */
+  /** Estado de la sala, solo en la que los admite. */
   modes: {
     stateId: string;
-    typeId: string;
-    states: { id: string; label: string }[];
-    types: { id: string; label: string; warn: boolean }[];
+    states: { id: string; label: string; group: string }[];
   } | null;
   sensors: Sensors | null;
   restricted: boolean;

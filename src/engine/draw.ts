@@ -222,12 +222,11 @@ export function drawFrame(input: DrawInput): void {
   if (modo?.steam) {
     for (const [sx, sy] of modo.steam) steam(iso, sx - ofx, sy - ofy);
   }
-  // Señalización de advertencia cuando el producto la exige.
-  const tipo = salaModos ? plant.modeType(salaModos) : null;
-  if (tipo?.warn && salaModos) {
+  // Señalización de advertencia cuando el estado la exige.
+  if (modo?.warn && salaModos) {
     const c = salaModos.label ?? [(salaModos.x0 + salaModos.x1) / 2, (salaModos.y0 + salaModos.y1) / 2];
     const [wx, wy] = P(c[0], c[1], 54 + Math.sin(iso.t * 2.4) * 2);
-    warnSign(iso, wx, wy, tipo.token);
+    warnSign(iso, wx, wy, 'alert');
   }
 
   if (hover) {

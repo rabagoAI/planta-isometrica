@@ -63,6 +63,8 @@ export class PlantEngine {
   private height = 600;
   private dpr = 1;
 
+  /** En modo pantalla el lienzo ocupa todo el alto del contenedor. */
+  private fillViewport = false;
   private hover: Room | null = null;
   private selected: Room;
 
@@ -274,6 +276,11 @@ export class PlantEngine {
     // el zoom al mínimo se vea el plano entero sin recortes.
     const b = this.bounds;
     const fit = this.camera.fitScale(cw, PAD);
+    if (this.fillViewport) {
+      const alto = Math.max(240, this.opts.viewport.clientHeight);
+      this.applyCanvasSize(cw, alto);
+      return;
+    }
     const necesario = Math.ceil((b.maxY - b.minY) * fit + 2 * PAD);
     // El mínimo da margen para acercarse, pero se recorta por dos lados: nunca
     // más de media pantalla —en un móvil en horizontal el plano se iría fuera de
@@ -282,6 +289,10 @@ export class PlantEngine {
     const holgura = Math.min(MIN_HEIGHT, Math.round(window.innerHeight * 0.5), necesario * 2);
     const ch = Math.max(necesario, holgura);
 
+    this.applyCanvasSize(cw, ch);
+  }
+
+  private applyCanvasSize(cw: number, ch: number): void {
     const canvas = this.opts.canvas;
     canvas.width = Math.round(cw * this.dpr);
     canvas.height = Math.round(ch * this.dpr);
@@ -290,6 +301,27 @@ export class PlantEngine {
     this.width = cw;
     this.height = ch;
     this.applyView();
+    // Cambiar el tamaño vacía el lienzo. Si el bucle está suspendido —pestaña
+    // oculta— quedaría en blanco hasta volver, así que se repinta aquí mismo.
+    this.render();
+  }
+
+  /**
+   * Modo pantalla: el lienzo llena el contenedor y la cámara encuadra la sala.
+   * Pensado para dejar la vista fija en un monitor de planta.
+   */
+  setRoomScreen(on: boolean): void {
+    if (this.fillViewport === on) return;
+    this.fillViewport = on;
+    this.tour.active = false;
+    this.resize();
+    if (on) {
+      this.selectRoom(DATA.roomModes.room);
+      this.focusRoom(DATA.roomModes.room, 6);
+    } else {
+      this.camera.reset();
+    }
+    this.publish();
   }
 
   /** Vuelca la cámara sobre la proyección. */
@@ -435,16 +467,6 @@ export class PlantEngine {
     this.publish();
   }
 
-  /** Cambia el tipo de producto que se fabrica en una sala. */
-  setRoomProduct(roomId: string, typeId: string): void {
-    const r = this.plant.byId[roomId];
-    if (!r || this.plant.modes.room !== roomId) return;
-    if (r.product === typeId) return;
-    r.product = typeId;
-    const def = this.plant.modes.types.find((x) => x.id === typeId);
-    if (def) this.sim.log((r.short || r.name) + ': fabricación ' + def.label);
-    this.publish();
-  }
 
   /** Cambia el lote que detallan los paneles. */
   focusLot(id: string): void {
@@ -504,6 +526,11 @@ export class PlantEngine {
       this.publish();
     }
 
+    this.render();
+  }
+
+  /** Pinta un fotograma. Separado del bucle para poder repintar a demanda. */
+  private render(): void {
     drawFrame({
       iso: this.iso,
       plant: this.plant,
@@ -566,9 +593,7 @@ export class PlantEngine {
         modes: plant.modes.room === r.id
           ? {
               stateId: r.mode ?? '',
-              typeId: r.product ?? '',
-              states: plant.modes.states.map((x) => ({ id: x.id, label: x.label })),
-              types: plant.modes.types.map((x) => ({ id: x.id, label: x.label, warn: !!x.warn })),
+              states: plant.modes.states.map((x) => ({ id: x.id, label: x.label, group: x.group })),
             }
           : null,
         sensors: r.sens ? { ...r.sens } : null,

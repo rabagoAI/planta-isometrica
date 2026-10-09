@@ -4,7 +4,7 @@
  */
 
 import type {
-  DoorData, PlantData, Room, RoomModeState, RoomModeType, RoomModes, RoomState,
+  DoorData, PlantData, Room, RoomModeState, RoomModes, RoomState,
 } from './types';
 
 export const STATE_LABEL: Record<RoomState, string> = {
@@ -47,7 +47,6 @@ export class Plant {
       act: false,
       clean: 0,
       mode: null,
-      product: null,
       adj: new Set<Room>(),
       // Solo las salas de producción están instrumentadas.
       sens: r.kind === 'prod'
@@ -57,10 +56,7 @@ export class Plant {
     for (const r of this.rooms) this.byId[r.id] = r;
 
     const sala = this.byId[this.modes.room];
-    if (sala) {
-      sala.mode = this.modes.default.state;
-      sala.product = this.modes.default.type;
-    }
+    if (sala) sala.mode = this.modes.default;
 
     this.doors = data.doors.map((d: DoorData) => {
       const h = d.axis === 'h';
@@ -110,9 +106,4 @@ export class Plant {
     return this.modes.states.find((s) => s.id === r.mode) ?? null;
   }
 
-  /** Tipo de producto de una sala, si procede. */
-  modeType(r: Room): RoomModeType | null {
-    if (!r.product || this.modes.room !== r.id) return null;
-    return this.modes.types.find((t) => t.id === r.product) ?? null;
-  }
 }

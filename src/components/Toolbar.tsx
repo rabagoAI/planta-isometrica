@@ -7,6 +7,7 @@ interface Props {
   view: PlantSnapshot['view'];
   tourActive: boolean;
   onTour: () => void;
+  onRoomScreen: () => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetView: () => void;
@@ -22,7 +23,8 @@ interface Props {
 /** Leyenda de estados y controles de la simulación. */
 export function Toolbar({
   legend, view, tourActive, playing, speed, incident, incidentRoom,
-  onZoomIn, onZoomOut, onResetView, onTour, onTogglePlaying, onSpeed, onToggleIncident,
+  onZoomIn, onZoomOut, onResetView, onTour, onRoomScreen,
+  onTogglePlaying, onSpeed, onToggleIncident,
 }: Props) {
   // El botón de desviación tiene tres fases: provocar, contener y esperar.
   const incidentLabel = !incident.on
@@ -79,6 +81,9 @@ export function Toolbar({
           title="Recorrido guiado por las etapas del proceso"
         >
           {tourActive ? 'Salir de la presentación' : 'Presentación'}
+        </button>
+        <button type="button" onClick={onRoomScreen} title="Vista de una sola sala, para un monitor de planta">
+          Pantalla de sala
         </button>
         <button type="button" aria-pressed={!playing} onClick={onTogglePlaying}>
           {playing ? 'Pausar' : 'Reanudar'}

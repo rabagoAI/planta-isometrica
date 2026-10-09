@@ -6,6 +6,7 @@ import { LotPanel } from './components/LotPanel';
 import { RoomPanel } from './components/RoomPanel';
 import { LogPanel } from './components/LogPanel';
 import { ThemeSwitch } from './components/ThemeSwitch';
+import { RoomScreen } from './components/RoomScreen';
 import { PlantStore, usePlantSnapshot } from './store/plantStore';
 import { plantData, usingDemoPlant } from './data/plant';
 import type { PlantEngine } from './engine';
@@ -21,10 +22,20 @@ export default function App() {
 
   const engineRef = useRef<PlantEngine | null>(null);
   const [roomOptions, setRoomOptions] = useState<{ id: string; name: string }[]>([]);
+  // Modo pantalla: solo la sala, para dejarlo fijo en un monitor de planta.
+  // Va en el hash para poder abrir el navegador directamente ahí.
+  const [screen, setScreen] = useState(() => location.hash === '#sala');
 
   const onReady = useCallback((engine: PlantEngine) => {
     engineRef.current = engine;
     setRoomOptions(engine.roomOptions());
+    if (location.hash === '#sala') engine.setRoomScreen(true);
+  }, []);
+
+  const toggleScreen = useCallback((on: boolean) => {
+    setScreen(on);
+    location.hash = on ? '#sala' : '';
+    engineRef.current?.setRoomScreen(on);
   }, []);
 
   // El título de la pestaña sale del plano cargado, no está fijado en el HTML.
@@ -34,7 +45,7 @@ export default function App() {
   const incidentRoom = DATA.rooms.find((r) => r.id === DATA.incident.room)?.short ?? '';
 
   return (
-    <main className="app">
+    <main className={screen ? 'app screen-mode' : 'app'}>
       <header className="top">
         <div>
           <p className="eyebrow">{DATA.meta.level} · plano de instalación</p>
@@ -52,6 +63,14 @@ export default function App() {
       {snapshot && <StatsBar stats={snapshot.stats} />}
 
       <section className="stage-card" aria-label="Plano isométrico de la planta baja">
+        {screen && snapshot ? (
+          <RoomScreen
+            room={snapshot.room}
+            clock={snapshot.clock}
+            onMode={(roomId, stateId) => engineRef.current?.setRoomMode(roomId, stateId)}
+            onExit={() => toggleScreen(false)}
+          />
+        ) : (
         <Toolbar
           legend={DATA.legend}
           view={snapshot?.view ?? { zoom: 1, atFit: true, atMax: false }}
@@ -71,7 +90,9 @@ export default function App() {
           onTogglePlaying={() => engineRef.current?.togglePlaying()}
           onSpeed={(v) => engineRef.current?.setSpeed(v)}
           onToggleIncident={() => engineRef.current?.toggleIncident()}
+          onRoomScreen={() => toggleScreen(true)}
         />
+        )}
         <PlantCanvas
           store={store}
           onReady={onReady}
@@ -94,7 +115,6 @@ export default function App() {
             options={roomOptions}
             onSelect={(id) => engineRef.current?.selectRoom(id)}
             onMode={(roomId, stateId) => engineRef.current?.setRoomMode(roomId, stateId)}
-            onProduct={(roomId, typeId) => engineRef.current?.setRoomProduct(roomId, typeId)}
           />
           <LogPanel log={snapshot.log} />
         </section>

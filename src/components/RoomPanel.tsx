@@ -6,7 +6,6 @@ interface Props {
   options: { id: string; name: string }[];
   onSelect: (id: string) => void;
   onMode: (roomId: string, stateId: string) => void;
-  onProduct: (roomId: string, typeId: string) => void;
 }
 
 /** Superficies en m² con coma decimal, como el resto de la interfaz. */
@@ -15,7 +14,7 @@ function m2(area: number | null): string {
 }
 
 /** Ficha de la sala seleccionada en el plano o en el desplegable. */
-export function RoomPanel({ room, options, onSelect, onMode, onProduct }: Props) {
+export function RoomPanel({ room, options, onSelect, onMode }: Props) {
   const rows: [string, string][] = [
     ['Superficie', m2(room.area)],
     ['Personas', room.people ? String(room.people) : 'Ninguna'],
@@ -31,7 +30,8 @@ export function RoomPanel({ room, options, onSelect, onMode, onProduct }: Props)
   if (room.restricted) rows.push(['Acceso', 'Restringido']);
 
   const m = room.modes;
-  const tipo = m?.types.find((t) => t.id === m.typeId);
+  // Un solo desplegable: la sala solo puede estar en un estado a la vez.
+  const grupos = [...new Set(m?.states.map((s) => s.group) ?? [])];
 
   return (
     <article className="panel">
@@ -55,18 +55,15 @@ export function RoomPanel({ room, options, onSelect, onMode, onProduct }: Props)
           <label>
             Estado de la sala
             <select value={m.stateId} onChange={(e) => onMode(room.id, e.target.value)}>
-              {m.states.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+              {grupos.map((g) => (
+                <optgroup key={g} label={g}>
+                  {m.states.filter((o) => o.group === g).map((o) => (
+                    <option key={o.id} value={o.id}>{o.label}</option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </label>
-          <label>
-            Fabricación
-            <select value={m.typeId} onChange={(e) => onProduct(room.id, e.target.value)}>
-              {m.types.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
-            </select>
-          </label>
-          {tipo?.warn && (
-            <p className="warn">⚠ Requiere señalización de alérgenos</p>
-          )}
         </div>
       )}
 
